@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3a0ca3;
+            --secondary-color: #5e17eb;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #2b2d42;
+            --success-color: #2ecc71;
+            --info-color: #3498db;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: none;
+            font-weight: 600;
+        }
+        
+        .bg-purple {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+        }
+        
+        .bg-info {
+            background: linear-gradient(135deg, var(--info-color) 0%, #2574a9 100%) !important;
+        }
+        
+        .bg-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%) !important;
+        }
+        
+        .bg-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d35400 100%) !important;
+        }
+        
+        .bg-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%) !important;
+        }
+        
+        .btn {
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-danger {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+        
+        .list-group-item {
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .list-group-item:hover {
+            background-color: rgba(76, 201, 240, 0.05);
+            border-color: var(--accent-color);
+        }
+        
+        .list-group-item h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2, h4, h5 {
+            color: var(--dark-text);
+            font-weight: 700;
+        }
+        
+        h2 {
+            margin: 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+        }
+        
+        .dashboard-stats {
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.1) 0%, rgba(67, 97, 238, 0.1) 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+        
+        .stat-card {
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .icon-purple {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        .icon-green {
+            background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%);
+        }
+        
+        .icon-blue {
+            background: linear-gradient(135deg, var(--info-color) 0%, #2574a9 100%);
+        }
+        
+        .icon-orange {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d35400 100%);
+        }
+        
+        .search-filter {
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab-content {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-tabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            border: 1px solid transparent;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-color: #dee2e6 #dee2e6 #fff;
+            background-color: white;
+        }
+        
+        .user-card {
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .user-card-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .user-card-body {
+            padding: 1.5rem;
+        }
+        
+        .user-card-footer {
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid;
+        }
+        
+        .badge-outline-success {
+            color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .badge-outline-danger {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-shield-alt me-2"></i>Admin Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info animate__animated animate__fadeIn">
+                        <i class="fas fa-info-circle me-2"></i>{{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Dashboard Header -->
+        <h2 class="animate__animated animate__fadeIn">
+            <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+        </h2>
+        
+        <!-- Stats Cards -->
+        <div class="row dashboard-stats animate__animated animate__fadeIn">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon icon-purple mb-3">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="stat-number">{{ users|length }}</h3>
+                    <p class="stat-label">Total Users</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon icon-green mb-3">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="stat-number">{{ providers|length }}</h3>
+                    <p class="stat-label">Service Providers</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon icon-blue mb-3">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3 class="stat-number">{{ requests|length }}</h3>
+                    <p class="stat-label">Total Requests</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon icon-orange mb-3">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="stat-number">
+                        {% set rating_count = 0 %}
+                        {% for provider in providers %}
+                            {% if provider.total_ratings %}
+                                {% set rating_count = rating_count + provider.total_ratings %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ rating_count }}
+                    </h3>
+                    <p class="stat-label">Total Ratings</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Tabs -->
+        <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="true">
+                    <i class="fas fa-users me-2"></i>Users Management
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="providers-tab" data-bs-toggle="tab" data-bs-target="#providers" type="button" role="tab" aria-controls="providers" aria-selected="false">
+                    <i class="fas fa-user-tie me-2"></i>Service Providers
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="false">
+                    <i class="fas fa-clipboard-list me-2"></i>Service Requests
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Contents -->
+        <div class="tab-content" id="adminTabsContent">
+            <!-- Users Management Tab -->
+            <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4><i class="fas fa-users me-2"></i>Users Management</h4>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="row search-filter">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="userSearch" placeholder="Search by username or email...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="userRoleFilter">
+                            <option value="">All Roles</option>
+                            <option value="client">Clients</option>
+                            <option value="provider">Providers</option>
+                            <option value="admin">Admins</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Users List -->
+                <div class="row" id="usersList">
+                    {% for user in users %}
+                    <div class="col-lg-4 col-md-6 user-card-container animate__animated animate__fadeIn" data-role="{{ user.role }}">
+                        <div class="user-card position-relative">
+                            <span class="status-badge badge-outline badge-outline-success">Active</span>
+                            <div class="user-card-header d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas {% if user.role == 'admin' %}fa-user-shield{% elif user.role == 'provider' %}fa-user-tie{% else %}fa-user{% endif %} fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">{{ user.username }}</h5>
+                                    <span class="badge bg-{{ 'purple' if user.role == 'admin' else 'success' if user.role == 'provider' else 'info' }}">
+                                        {{ user.role.title() }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="user-card-body">
+                                <p><i class="fas fa-envelope me-2"></i>{{ user.email }}</p>
+                                <p><i class="fas fa-user-clock me-2"></i>User ID: #{{ user.id }}</p>
+                                
+                                {% if user.role == 'provider' %}
+                                    {% for provider in providers %}
+                                        {% if provider.user_id == user.id %}
+                                            <p><i class="fas fa-tag me-2"></i>Service: {{ provider.service_type.title() }}</p>
+                                            <p><i class="fas fa-dollar-sign me-2"></i>Rate: ₹{{ provider.rate }}/hr</p>
+                                            <p>
+                                                <i class="fas fa-star me-2"></i>Rating: 
+                                                {% if provider.avg_rating %}
+                                                    {{ "%.1f"|format(provider.avg_rating) }} ({{ provider.total_ratings }} reviews)
+                                                {% else %}
+                                                    Not rated yet
+                                                {% endif %}
+                                            </p>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="user-card-footer d-flex justify-content-between">
+                                <form method="POST" action="{{ url_for('toggle_user', user_id=user.id) }}" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-toggle-on me-1"></i>Toggle Status
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Service Providers Tab -->
+            <div class="tab-pane fade" id="providers" role="tabpanel" aria-labelledby="providers-tab">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4><i class="fas fa-user-tie me-2"></i>Service Providers</h4>
+                    <div class="input-group w-50">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="providerSearch" placeholder="Search by service type...">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    {% for provider in providers %}
+                    <div class="col-md-6 mb-4 animate__animated animate__fadeIn">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user-tie me-2"></i>{{ provider.service_type.title() }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {% for user in users %}
+                                    {% if user.id == provider.user_id %}
+                                        <p><i class="fas fa-user me-2"></i><strong>Username:</strong> {{ user.username }}</p>
+                                        <p><i class="fas fa-envelope me-2"></i><strong>Email:</strong> {{ user.email }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                                <p><i class="fas fa-dollar-sign me-2"></i><strong>Rate:</strong> ₹{{ provider.rate }}/hr</p>
+                                <p><i class="fas fa-info-circle me-2"></i><strong>Description:</strong></p>
+                                <p class="ms-4">{{ provider.description }}</p>
+                                <div class="d-flex align-items-center mt-3">
+                                    <span class="me-2"><i class="fas fa-star me-1 text-warning"></i><strong>Rating:</strong></span>
+                                    <div class="progress flex-grow-1" style="height: 10px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (provider.avg_rating / 5) * 100 if provider.avg_rating else 0 }}%" aria-valuenow="{{ provider.avg_rating if provider.avg_rating else 0 }}" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    <span class="ms-2">{{ "%.1f"|format(provider.avg_rating) if provider.avg_rating else "0.0" }}/5.0 ({{ provider.total_ratings }} reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Service Requests Tab -->
+            <div class="tab-pane fade" id="requests" role="tabpanel" aria-labelledby="requests-tab">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4><i class="fas fa-clipboard-list me-2"></i>Service Requests</h4>
+                    <div>
+                        <select class="form-select" id="requestStatusFilter">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Client</th>
+                                <th>Provider</th>
+                                <th>Service Type</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in requests %}
+                            <tr class="animate__animated animate__fadeIn">
+                                <td>#{{ request.id }}</td>
+                                <td>
+                                    {% for user in users %}
+                                        {% if user.id == request.client_id %}
+                                            {{ user.username }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for provider in providers %}
+                                        {% if provider.id == request.provider_id %}
+                                            {% for user in users %}
+                                                {% if user.id == provider.user_id %}
+                                                    {{ user.username }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for provider in providers %}
+                                        {% if provider.id == request.provider_id %}
+                                            {{ provider.service_type.title() }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-{% if request.status == 'pending' %}warning{% elif request.status == 'accepted' %}primary{% elif request.status == 'completed' %}success{% else %}secondary{% endif %}">
+                                        {{ request.status.title() }}
+                                    </span>
+                                </td>
+                                <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ request.updated_at.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // User search functionality
+            const userSearch = document.getElementById('userSearch');
+            const userCards = document.querySelectorAll('.user-card-container');
+            
+            if (userSearch) {
+                userSearch.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    
+                    userCards.forEach(card => {
+                        const username = card.querySelector('h5').textContent.toLowerCase();
+                        const email = card.querySelector('.user-card-body p:first-child').textContent.toLowerCase();
+                        
+                        if (username.includes(searchTerm) || email.includes(searchTerm)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // Role filter
+            const roleFilter = document.getElementById('userRoleFilter');
+            if (roleFilter) {
+                roleFilter.addEventListener('change', function() {
+                    const selectedRole = this.value;
+                    
+                    userCards.forEach(card => {
+                        if (!selectedRole || card.dataset.role === selectedRole) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // Request status filter
+            const requestStatusFilter = document.getElementById('requestStatusFilter');
+            const requestRows = document.querySelectorAll('#requests tbody tr');
+            
+            if (requestStatusFilter && requestRows.length > 0) {
+                requestStatusFilter.addEventListener('change', function() {
+                    const selectedStatus = this.value.toLowerCase();
+                    
+                    requestRows.forEach(row => {
+                        const statusCell = row.querySelector('td:nth-child(5)');
+                        const status = statusCell.textContent.trim().toLowerCase();
+                        
+                        if (!selectedStatus || status.includes(selectedStatus)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
