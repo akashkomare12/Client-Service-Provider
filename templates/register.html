@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Service Provider Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #2b2d42;
+            --success-color: #06d6a0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 1.5rem;
+            border-bottom: none;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 50px;
+            padding: 0.8rem 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+            border-color: var(--primary-color);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-left: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .register-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .service-fields {
+            background-color: rgba(76, 201, 240, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 2px dashed rgba(76, 201, 240, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .service-fields.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.2);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-connector {
+            height: 3px;
+            background-color: #e9ecef;
+            width: 50px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-connector.active {
+            background-color: var(--primary-color);
+        }
+        
+        .role-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-card {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .role-card.active {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .role-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+        }
+        
+        .role-card.active .role-icon {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card animate__animated animate__fadeIn">
+                    <div class="card-header text-white text-center">
+                        <div class="register-icon animate__animated animate__fadeInDown">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h2>Create an Account</h2>
+                        <p class="mb-0">Join our platform to connect with service providers</p>
+                        
+                        <div class="step-indicator mt-4">
+                            <div class="step active" id="step1">1</div>
+                            <div class="step-connector active"></div>
+                            <div class="step" id="step2">2</div>
+                            <div class="step-connector"></div>
+                            <div class="step" id="step3">3</div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" class="animate__animated animate__fadeInUp" id="registerForm">
+                            <div id="step1Content">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Username
+                                    </label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>Password
+                                    </label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required>
+                                    <div class="password-strength mt-2 d-none" id="passwordStrength">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted">Password strength: <span id="strengthText">Weak</span></small>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="button" class="btn btn-primary" onclick="nextStep(1)">
+                                        Continue <i class="fas fa-arrow-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="step2Content" style="display: none;">
+                                <h4 class="text-center mb-4">Choose Your Role</h4>
+                                <div class="role-selector">
+                                    <div class="role-card" onclick="selectRole('client')" id="clientCard">
+                                        <div class="role-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <h5>Client</h5>
+                                        <p class="small text-muted">Find services</p>
+                                        <input type="radio" name="role" value="client" id="clientRole" style="display: none;" checked>
+                                    </div>
+                                    <div class="role-card" onclick="selectRole('provider')" id="providerCard">
+                                        <div class="role-icon">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                        <h5>Provider</h5>
+                                        <p class="small text-muted">Offer services</p>
+                                        <input type="radio" name="role" value="provider" id="providerRole" style="display: none;">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
+                                        <i class="fas fa-arrow-left me-1"></i> Back
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                                        Continue <i class="fas fa-arrow-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="step3Content" style="display: none;">
+                                <div id="serviceFields" class="service-fields" style="display: none;">
+                                    <h4 class="mb-3 text-center">Service Provider Details</h4>
+                                    <div class="mb-3">
+                                        <label for="service_type" class="form-label">
+                                            <i class="fas fa-briefcase me-1"></i>Service Type
+                                        </label>
+                                        <select class="form-select" id="service_type" name="service_type">
+                                            <option value="" disabled selected>Select your service type</option>
+                                            <option value="electrician">Electrician</option>
+                                            <option value="plumber">Plumber</option>
+                                            <option value="carpenter">Carpenter</option>
+                                            <option value="mechanic">Mechanic</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="rate" class="form-label">
+                                            <i class="fas fa-dollar-sign me-1"></i>Hourly Rate (₹)
+                                        </label>
+                                        <input type="number" step="0.01" class="form-control" id="rate" name="rate" min="0" placeholder="Enter your hourly rate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">
+                                            <i class="fas fa-info-circle me-1"></i>Service Description
+                                        </label>
+                                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Describe your services and expertise"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" onclick="prevStep(3)">
+                                        <i class="fas fa-arrow-left me-1"></i> Back
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-check-circle me-1"></i> Complete Registration
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-center mt-3">
+                            Already have an account? <a href="{{ url_for('login') }}" class="fw-bold text-decoration-none">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.querySelector('.progress-bar');
+        const strengthText = document.getElementById('strengthText');
+        const passwordStrength = document.getElementById('passwordStrength');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            passwordStrength.classList.remove('d-none');
+            
+            if (password.length === 0) {
+                passwordStrength.classList.add('d-none');
+                return;
+            }
+            
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Character type checks
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update UI
+            const percent = (strength / 5) * 100;
+            strengthBar.style.width = percent + '%';
+            
+            if (strength < 2) {
+                strengthBar.className = 'progress-bar bg-danger';
+                strengthText.textContent = 'Weak';
+            } else if (strength < 4) {
+                strengthBar.className = 'progress-bar bg-warning';
+                strengthText.textContent = 'Medium';
+            } else {
+                strengthBar.className = 'progress-bar bg-success';
+                strengthText.textContent = 'Strong';
+            }
+        });
+        
+        // Multi-step form
+        function nextStep(currentStep) {
+            // Simple validation for first step
+            if (currentStep === 1) {
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                if (!username || !email || !password) {
+                    alert('Please fill in all fields.');
+                    return;
+                }
+            }
+            
+            document.getElementById('step' + currentStep + 'Content').style.display = 'none';
+            document.getElementById('step' + (currentStep + 1) + 'Content').style.display = 'block';
+            
+            document.getElementById('step' + (currentStep + 1)).classList.add('active');
+            
+            if (currentStep === 1) {
+                document.querySelectorAll('.step-connector')[1].classList.add('active');
+            }
+            
+            // If moving to step 3, check role
+            if (currentStep === 2) {
+                const isProvider = document.getElementById('providerRole').checked;
+                if (isProvider) {
+                    document.getElementById('serviceFields').style.display = 'block';
+                    document.getElementById('serviceFields').classList.add('active');
+                    document.getElementById('serviceFields').classList.add('animate__animated');
+                    document.getElementById('serviceFields').classList.add('animate__fadeIn');
+                } else {
+                    document.getElementById('serviceFields').style.display = 'none';
+                }
+            }
+        }
+        
+        function prevStep(currentStep) {
+            document.getElementById('step' + currentStep + 'Content').style.display = 'none';
+            document.getElementById('step' + (currentStep - 1) + 'Content').style.display = 'block';
+            
+            document.getElementById('step' + currentStep).classList.remove('active');
+            
+            if (currentStep === 3) {
+                document.querySelectorAll('.step-connector')[1].classList.remove('active');
+            }
+        }
+        
+        function selectRole(role) {
+            if (role === 'client') {
+                document.getElementById('clientCard').classList.add('active');
+                document.getElementById('providerCard').classList.remove('active');
+                document.getElementById('clientRole').checked = true;
+            } else {
+                document.getElementById('providerCard').classList.add('active');
+                document.getElementById('clientCard').classList.remove('active');
+                document.getElementById('providerRole').checked = true;
+            }
+        }
+    </script>
+</body>
+</html>
