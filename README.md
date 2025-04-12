@@ -67,7 +67,7 @@ project/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/service-marketplace-app.git
+git clone https://github.com/akashkomare12/Client-Service-Provider.git
 cd service-marketplace-app
 ```
 
