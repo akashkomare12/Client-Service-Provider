@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #2b2d42;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: none;
+            font-weight: 600;
+        }
+        
+        .bg-info {
+            background: linear-gradient(135deg, var(--info-color) 0%, #2574a9 100%) !important;
+        }
+        
+        .bg-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%) !important;
+        }
+        
+        .bg-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d35400 100%) !important;
+        }
+        
+        .btn {
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+        
+        .list-group-item {
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .list-group-item:hover {
+            background-color: rgba(76, 201, 240, 0.05);
+            border-color: var(--accent-color);
+        }
+        
+        .list-group-item h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2, h4 {
+            color: var(--dark-text);
+            font-weight: 700;
+        }
+        
+        h2 {
+            margin: 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+        }
+        
+        .profile-card {
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.1) 0%, rgba(67, 97, 238, 0.1) 100%);
+            border-left: 4px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-tools me-2"></i>Service Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info animate__animated animate__fadeIn">
+                        <i class="fas fa-info-circle me-2"></i>{{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card profile-card animate__animated animate__fadeIn">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-user-circle fa-3x text-primary me-3"></i>
+                            <div>
+                                <h4 class="mb-1">My Service Profile</h4>
+                                <h5 class="mb-0">{{ provider.service_type.title() }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><strong><i class="fas fa-dollar-sign me-2"></i>Rate:</strong> ₹{{ provider.rate }}/hr</p>
+                            </div>
+                            <div class="col-md-8">
+                                <p><strong><i class="fas fa-comment-alt me-2"></i>Description:</strong> {{ provider.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="animate__animated animate__fadeIn">
+            <i class="fas fa-clipboard-list me-2"></i>Service Requests
+        </h2>
+        
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card animate__animated animate__fadeInLeft">
+                    <div class="card-header bg-warning text-white">
+                        <h4><i class="fas fa-clock me-2"></i>Pending Requests</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for request in requests if request.status == 'pending' %}
+                                <div class="list-group-item animate__animated animate__fadeIn" style="animation-delay: {{ loop.index * 0.1 }}s">
+                                    <h5><i class="fas fa-file-alt me-2"></i>Request #{{ request.id }}</h5>
+                                    <p class="mb-1"><strong><i class="far fa-calendar-alt me-1"></i>Created:</strong> {{ request.created_at.strftime('%Y-%m-%d') }}</p>
+                                    <p class="mb-3">{{ request.description }}</p>
+                                    <form method="POST" action="{{ url_for('update_request', request_id=request.id) }}" class="d-flex gap-2">
+                                        <button type="submit" name="action" value="accept" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check me-1"></i>Accept
+                                        </button>
+                                        <button type="submit" name="action" value="cancel" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-times me-1"></i>Decline
+                                        </button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <p class="text-center py-3"><i class="fas fa-inbox me-2"></i>No pending requests.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card animate__animated animate__fadeInRight">
+                    <div class="card-header bg-success text-white">
+                        <h4><i class="fas fa-briefcase me-2"></i>Accepted Jobs</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for request in requests if request.status == 'accepted' %}
+                                <div class="list-group-item animate__animated animate__fadeIn" style="animation-delay: {{ loop.index * 0.1 }}s">
+                                    <h5><i class="fas fa-file-alt me-2"></i>Request #{{ request.id }}</h5>
+                                    <p class="mb-1"><strong><i class="far fa-calendar-alt me-1"></i>Created:</strong> {{ request.created_at.strftime('%Y-%m-%d') }}</p>
+                                    <p class="mb-3">{{ request.description }}</p>
+                                    <form method="POST" action="{{ url_for('update_request', request_id=request.id) }}" class="d-flex gap-2">
+                                        <button type="submit" name="action" value="complete" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check-circle me-1"></i>Mark Complete
+                                        </button>
+                                        <button type="submit" name="action" value="cancel" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-ban me-1"></i>Cancel Job
+                                        </button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <p class="text-center py-3"><i class="fas fa-briefcase me-2"></i>No active jobs.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card animate__animated animate__fadeInUp">
+                    <div class="card-header bg-info text-white">
+                        <h4><i class="fas fa-history me-2"></i>Job History</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for request in requests if request.status in ['completed', 'cancelled'] %}
+                                <div class="list-group-item animate__animated animate__fadeIn" style="animation-delay: {{ loop.index * 0.1 }}s">
+                                    <h5><i class="fas fa-file-alt me-2"></i>Request #{{ request.id }}</h5>
+                                    <p class="mb-1">
+                                        <strong><i class="fas fa-chart-line me-1"></i>Status:</strong> 
+                                        <span class="badge bg-{{ 'success' if request.status == 'completed' else 'secondary' }}">
+                                            {{ request.status.title() }}
+                                        </span>
+                                        
+                                    </p>
+                                    <p class="mb-1"><strong><i class="far fa-calendar-alt me-1"></i>Created:</strong> {{ request.created_at.strftime('%Y-%m-%d') }}</p>
+                                    <p class="mb-1"><strong><i class="far fa-calendar-check me-1"></i>Updated:</strong> {{ request.updated_at.strftime('%Y-%m-%d') }}</p>
+                                    <p class="mb-0">{{ request.description }}</p>
+                                </div>
+                            {% else %}
+                                <p class="text-center py-3"><i class="fas fa-history me-2"></i>No job history yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
